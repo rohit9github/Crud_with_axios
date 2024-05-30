@@ -65,7 +65,7 @@ function Add() {
 
     let updateData = (id) => {
         let dd = details.find((v) => v.id === id)
-        setWork(dd);
+        setWork({task:dd.work});
         setId(id)
         console.log(dd)
     }
