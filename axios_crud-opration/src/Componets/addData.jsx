@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-
-
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function Add() {
 
@@ -74,22 +75,39 @@ function Add() {
     return (
         <>
             <h1>Add Your Details</h1>
-            <form method="post" onSubmit={(e) => submitData(e)}>
-                <label htmlFor="">Add Your userName :- </label>
-                <input type="text" placeholder="Enter Your Username" name="username" value={userData.username ? userData.username : ""} onChange={(e) => getValue(e)} /> <br /><br />
-                <label htmlFor="">Add Your Email :- </label>
-                <input type="text" placeholder="Enter Your Email" name="email" value={userData.email ? userData.email : ""} onChange={(e) => getValue(e)} /> <br /><br />
-                <label htmlFor="">Add Your Number :- </label>
-                <input type="text" placeholder="Enter Your Number" name="number" value={userData.number ? userData.number : ""} onChange={(e) => getValue(e)} /> <br /><br />
-                <label htmlFor="">Add Image :- </label>
-                <input type="text" placeholder="Enter Your Iamge" name="img" value={userData.img ? userData.img : ""} onChange={(e) => getValue(e)} /> <br /><br />
-                <button type="submit">{id == 0 ? "Submit" : "Update"}</button>
-            </form>
+            <Container>
+                <Row className="justify-content-md-center my-5">
+                    <Col lg="8">
+                        <Form method="post" onSubmit={(e) => submitData(e)}>
+                        <Form.Group className="mb-3" controlId="formBasicNumber">
+                                <Form.Label>UserName</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Your UserName"  name="username" value={userData.username ? userData.username : ""} onChange={(e) => getValue(e)} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control type="email" placeholder="Enter Your Email" name="email" value={userData.email ? userData.email : ""} onChange={(e) => getValue(e)} />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicPassword">
+                                <Form.Label>Number</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Your Number"  name="number" value={userData.number ? userData.number : ""} onChange={(e) => getValue(e)} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicImg">
+                                <Form.Label>Image</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Your Image Link"   name="img" value={userData.img ? userData.img : ""} onChange={(e) => getValue(e)} />
+                            </Form.Group>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
 
             <div>
-                <h1>Your Data</h1>
+                <h1>Your User Details</h1>
                 <Container>
-                    <Table striped bordered hover>
+                    <Table striped bordered hover className="mt-5">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -112,8 +130,8 @@ function Add() {
                                                 <td>{v.email}</td>
                                                 <td>{v.number}</td>
                                                 <td>  <img src={v.img} alt="" width={"80px"} /></td>
-                                                
-                                                <td><Button variant="danger"  onClick={() => deleteData(v.id)} >Delete</Button></td>
+
+                                                <td><Button variant="danger" onClick={() => deleteData(v.id)} >Delete</Button></td>
                                                 <td><Button variant="primary" onClick={() => updateData(v.id)} >Update</Button></td>
                                             </tr>
                                         </>
