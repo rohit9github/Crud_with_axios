@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify"
 
 function Add() {
 
@@ -68,20 +70,26 @@ function Add() {
         else {
             if (id == 0) {
                 axios.post("http://localhost:3000/data", userData).then(() => {
-                    alert("data added");
                     setUserData({})
                     getData();
+                    
+                    toast.success("data added successfulluy",{
+                        position: "top-center"
+                    })
                 }).catch(() => {
-                    alert("something wrong")
+                    toast.error("Something Wrong Please Wait")
                 })
             }
             else {
-                axios.put(`http://localhost:3000/data/${id}`, userData).then(() => {
-                    alert("data updated");
+                axios.put(`http://localhost:3000/data/${id}`, userData)
+                .then(() => {
                     setUserData({ username: "" })
                     getData();
+                    toast.success("data Updated SuccessFully",{
+                        position:"top-center"
+                    })
                 }).catch(() => {
-                    alert("something wrong")
+                    toast.error("Something Wrong Please Wait")
                 })
                 setId(0)
             }
@@ -105,8 +113,10 @@ function Add() {
     let deleteData = (id) => {
         axios.delete(`http://localhost:3000/data/${id}`)
             .then(() => {
-                alert("data deleted");
                 getData();
+                toast.warn("data deleted",{
+                    position:"top-center"
+                })
             }).catch((err) => {
                 console.log(err);
             })
@@ -124,6 +134,7 @@ function Add() {
         <>
             <h1>Add Your Details</h1>
             <Container>
+<ToastContainer />   
                 <Row className="justify-content-md-center my-5">
                     <Col lg="8">
                         <Form method="post" onSubmit={(e) => submitData(e)}>
