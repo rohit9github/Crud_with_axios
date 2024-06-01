@@ -13,32 +13,80 @@ function Add() {
     let [userData, setUserData] = useState({});
     let [details, setDetails] = useState([])
     let [id, setId] = useState(0)
+    let [error, setError] = useState({})
 
     let getValue = (e) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
+        if (e.target.name == "username") {
+            if (e.target.value == "") {
+                setError({ ...error, nameError: "Username is required" })
+            }
+            else {
+                setError({ ...error, nameError: "" })
+            }
+        }
+        else if (e.target.name == "email") {
+            if (e.target.value == "") {
+                setError({ ...error, emailError: "Email is required" })
+            }
+            else {
+                setError({ ...error, emailError: "" })
+            }
+        }
+        else if (e.target.name == "number") {
+            if (e.target.value == "") {
+                setError({ ...error, numberError: "number is required" })
+            }
+            else {
+                setError({ ...error, numberError: "" })
+            }
+        }
+        else if (e.target.name == "img") {
+            if (e.target.value == "") {
+                setError({...error, imgError: "img is required" })
+            }
+            else {
+                setError({...error, imgError: "" })
+            }
+        }
     }
 
     let submitData = (e) => {
         e.preventDefault();
-        if (id == 0) {
-            axios.post("http://localhost:3000/data", userData).then(() => {
-                alert("data added");
-                setUserData({})
-                getData();
-            }).catch(() => {
-                alert("something wrong")
-            })
+        if (userData.username == undefined) {
+            setError({ ...error, nameError: "Username is required" })
+        }
+        else if (userData.email == undefined) {
+            setError({ ...error, emailError: "Email is required" })
+        }
+        else if (userData.number == undefined) {
+            setError({ ...error, numberError: "Password is required" })
+        }
+        else if (userData.img == undefined) {
+            setError({...error, imgError: "img is required" })
         }
         else {
-            axios.put(`http://localhost:3000/data/${id}`, userData).then(() => {
-                alert("data updated");
-                setUserData({ username: "" })
-                getData();
-            }).catch(() => {
-                alert("something wrong")
-            })
-            setId(0)
+            if (id == 0) {
+                axios.post("http://localhost:3000/data", userData).then(() => {
+                    alert("data added");
+                    setUserData({})
+                    getData();
+                }).catch(() => {
+                    alert("something wrong")
+                })
+            }
+            else {
+                axios.put(`http://localhost:3000/data/${id}`, userData).then(() => {
+                    alert("data updated");
+                    setUserData({ username: "" })
+                    getData();
+                }).catch(() => {
+                    alert("something wrong")
+                })
+                setId(0)
+            }
         }
+
 
     }
 
@@ -79,22 +127,26 @@ function Add() {
                 <Row className="justify-content-md-center my-5">
                     <Col lg="8">
                         <Form method="post" onSubmit={(e) => submitData(e)}>
-                        <Form.Group className="mb-3" controlId="formBasicNumber">
+                            <Form.Group className="mb-3" controlId="formBasicNumber">
                                 <Form.Label>UserName</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Your UserName"  name="username" value={userData.username ? userData.username : ""} onChange={(e) => getValue(e)} />
+                                <Form.Control type="text" placeholder="Enter Your UserName" name="username" value={userData.username ? userData.username : ""} className={error.nameError ? "blink" : ""} onChange={(e) => getValue(e)} />
+                                <span className="text-blink">{error.nameError ? error.nameError : ""}</span>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Email address</Form.Label>
-                                <Form.Control type="email" placeholder="Enter Your Email" name="email" value={userData.email ? userData.email : ""} onChange={(e) => getValue(e)} />
+                                <Form.Control type="email" placeholder="Enter Your Email" name="email" value={userData.email ? userData.email : ""} className={error.emailError ? "blink":""} onChange={(e) => getValue(e)} />
+                                <span className="text-blink">{error.emailError ? error.emailError : ""}</span>
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>Number</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Your Number"  name="number" value={userData.number ? userData.number : ""} onChange={(e) => getValue(e)} />
+                                <Form.Control type="text" placeholder="Enter Your Number" name="number" value={userData.number ? userData.number : ""} className={error.numberError?"blink":""} onChange={(e) => getValue(e)} />
+                                <span className="text-blink">{error.numberError ? error.numberError : ""}</span>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicImg">
                                 <Form.Label>Image</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Your Image Link"   name="img" value={userData.img ? userData.img : ""} onChange={(e) => getValue(e)} />
+                                <Form.Control type="text" placeholder="Enter Your Image Link" name="img" value={userData.img ? userData.img : ""} className={error.imgError ?"blink":""} onChange={(e) => getValue(e)} />
+                                <span className="text-blink">{error.imgError? error.imgError : ""}</span>
                             </Form.Group>
                             <Button variant="primary" type="submit">
                                 Submit
